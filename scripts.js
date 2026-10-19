@@ -119,7 +119,7 @@ function updateTotals(){
     // Atualiza a quantidade de itens da lista
     expensesQuantity.textContent = `${items.length} ${items.length > 1 ? "despesas" : "despesa"}`
 
-    // Variável para incrementar o total
+    // Soma os valores em centavos para evitar imprecisões de ponto flutuante
     let total = 0
 
     // Percorre cada item (li) da lista (ul)
@@ -127,32 +127,26 @@ function updateTotals(){
       const itemAmount = items[item].querySelector(".expense-amount")
 
       // Remove caracteres não numéricos e substitui a vírgula pelo ponto
-      let value = itemAmount.textContent.replace(/[^\d,]/g, "").replace(",", ".")
+      const value = Number(itemAmount.textContent.replace(/[^\d,]/g, "").replace(",", "."))
 
-      // Converte o valor para float
-      value = parseFloat(value)
-
-      // Verifica e é um número válido
+      // Verifica se é um número válido
       if(isNaN(value)){
         return alert("Não foi possível calcular o total. O valor não parece ser um número")
       }
 
       //Incrementa o valor total
-      total += Number(value)
-
-      // Cria a span para adicionar o R$ formatado
-      const symbolBRL = document.createElement("small")
-      symbolBRL.textContent = "R$"
-
-      // Formata o valor e remove o R$ que será exibido pela small com um estilo customizado
-      total = formatCurrencyBRL(total).toUpperCase().replace("R$", "")
-
-      // Limpa o conteudo do elemento no HTML
-      expensesTotal.innerHTML = ""
-
-      // Adiciona o símbolo da moeda e o valor total formatado
-      expensesTotal.append(symbolBRL, total)
+      total += parseFloat(value)
     }
+
+    // Cria a span para adicionar o R$ formatado
+    const symbolBRL = document.createElement("small")
+    symbolBRL.textContent = "R$"
+
+    // Limpa o conteúdo do elemento no HTML
+    expensesTotal.innerHTML = ""
+
+    // Adiciona o símbolo da moeda e o valor total formatado
+    expensesTotal.append(symbolBRL, formatCurrencyBRL(total).replace("R$", ""))
 
   }catch (error){
     console.log(error)
