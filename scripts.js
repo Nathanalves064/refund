@@ -127,7 +127,7 @@ function updateTotals(){
       const itemAmount = items[item].querySelector(".expense-amount")
 
       // Remove caracteres não numéricos e substitui a vírgula pelo ponto
-      let value = itemAmount.textContent.replace(/[^\d]/g, "").replace(",", ".")
+      let value = itemAmount.textContent.replace(/[^\d,]/g, "").replace(",", ".")
 
       // Converte o valor para float
       value = parseFloat(value)
